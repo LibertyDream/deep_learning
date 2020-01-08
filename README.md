@@ -6,6 +6,7 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [神经网络](https://nbviewer.jupyter.org/github/LibertyDream/deep_learning/blob/master/DL/neural_network.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LibertyDream/deep_learning/master?filepath=DL%2Fneural_network.ipynb) | [HTML](https://libertydream.github.io/deep_learning/DL/neural_network.html) |
 | [中、英文本基础处理](https://nbviewer.jupyter.org/github/LibertyDream/deep_learning/blob/master/DL/en_zh_base_processing.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LibertyDream/deep_learning/master?filepath=DL%2Fen_zh_base_processing.ipynb) | [HTML](https://libertydream.github.io/deep_learning/DL/en_zh_base_processing.html) |
+| LDA主题分析与可视化                                          | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LibertyDream/deep_learning/master?filepath=DL%2Fen_zh_base_processing.ipynb) | [HTML](https://libertydream.github.io/deep_learning/DL/en_zh_base_processing.html) |
 
 ## NLP
 
