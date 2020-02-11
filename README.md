@@ -14,7 +14,7 @@
 
 [TextRank: Bringing Order into Texts](https://www.aclweb.org/anthology/W04-3252.pdf)
 
-[Word2Vec: Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/pdf/1301.3781)
+Word2Vec [[1]](https://arxiv.org/pdf/1301.3781)[[2]](https://arxiv.org/pdf/1310.4546)[[3]](https://arxiv.org/pdf/1402.3722v1)[[4]](https://arxiv.org/pdf/1411.2738v4)
 
 [GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/pubs/glove.pdf)
 
