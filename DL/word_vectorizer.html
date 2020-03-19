@@ -13017,45 +13017,6 @@ ul.typeahead-list  > li > a.pull-right {
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
-<style type="text/css">
-    
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-
-    </style>
 
 
 <style type="text/css">
@@ -13118,24 +13079,104 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="&#35789;&#21521;&#37327;&#26500;&#24314;&#19982;&#34920;&#31034;">&#35789;&#21521;&#37327;&#26500;&#24314;&#19982;&#34920;&#31034;<a class="anchor-link" href="#&#35789;&#21521;&#37327;&#26500;&#24314;&#19982;&#34920;&#31034;">&#182;</a></h1><ul>
 <li><a href="#TF-IDF">TF-IDF</a></li>
+<li><a href="#TextRank">TextRank</a></li>
 <li><a href="#Word2Vec">Word2Vec</a></li>
 </ul>
-<h2 id="TF-IDF">TF-IDF<a class="anchor-link" href="#TF-IDF">&#182;</a></h2>
+<h2 id="TF-IDF">TF-IDF<a class="anchor-link" href="#TF-IDF">&#182;</a></h2><ul>
+<li><strong>白板实现</strong></li>
+</ul>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">TfIdf</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idf_file</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        读入词典 IDF 值，计算平均 IDF 值</span>
+<span class="sd">        </span>
+<span class="sd">        Args：</span>
+<span class="sd">        -----------</span>
+<span class="sd">        idf_file:</span>
+<span class="sd">            IDF 值文件</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idf_default</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">with</span><span class="p">(</span><span class="n">idf_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">idf</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">idf</span><span class="p">:</span>
+                <span class="n">word_info</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_idf</span><span class="p">[</span><span class="n">word_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">word_info</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_idf_default</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">word_info</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idf_default</span> <span class="o">/=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idf</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_balck_words</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;没有&#39;</span><span class="p">,</span><span class="s1">&#39;不能&#39;</span><span class="p">,</span><span class="s1">&#39;不会&#39;</span><span class="p">,</span><span class="s1">&#39;还有&#39;</span><span class="p">,</span><span class="s1">&#39;不让&#39;</span><span class="p">,</span><span class="s1">&#39;出来&#39;</span><span class="p">,</span><span class="s1">&#39;不是&#39;</span><span class="p">,</span><span class="s1">&#39;点儿&#39;</span><span class="p">,</span><span class="s1">&#39;了解&#39;</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">extract_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        按 TF-IDF 值抽取前 top 个关键词</span>
+<span class="sd">        </span>
+<span class="sd">        Args：</span>
+<span class="sd">        -------------</span>
+<span class="sd">        document:</span>
+<span class="sd">            待取词文档</span>
+<span class="sd">        top:</span>
+<span class="sd">            输出关键词个数</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            top 个关键词与权重</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">sentences</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">keywords</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span>
+            <span class="n">words</span> <span class="o">=</span>  <span class="n">sentence</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_black_words</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+                    <span class="n">keywords</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">keywords</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="n">idf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idf_default</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idf</span><span class="p">:</span>
+                <span class="n">idf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idf</span><span class="p">[</span><span class="n">word</span><span class="p">]</span>
+            <span class="n">keywords</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">*=</span> <span class="n">idf</span>
+        
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keywords</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">top</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>scikit-learn 与 jieba 库</strong></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">import</span> <span class="nn">jieba.posseg</span>
 <span class="kn">import</span> <span class="nn">jieba.analyse</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">feature_extraction</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">TfidfTransformer</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">feature_extraction</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
 </pre></div>
 
     </div>
@@ -13508,6 +13549,244 @@ Prefix dict has been built successfully.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="TextRank">TextRank<a class="anchor-link" href="#TextRank">&#182;</a></h2><ul>
+<li><strong>白板实现</strong></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">TextRank</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">damping</span><span class="p">,</span> <span class="n">iter_nums</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        初始化 TextRank</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        window:</span>
+<span class="sd">            窗口长度</span>
+<span class="sd">        damping:</span>
+<span class="sd">            阻尼系数</span>
+<span class="sd">        iter_nums:</span>
+<span class="sd">            迭代次数</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">damping</span> <span class="o">=</span> <span class="n">damping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iter_num</span> <span class="o">=</span> <span class="n">iter_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_word</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_id</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sen_id</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">black_words</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;没有&#39;</span><span class="p">,</span><span class="s1">&#39;不能&#39;</span><span class="p">,</span><span class="s1">&#39;不会&#39;</span><span class="p">,</span><span class="s1">&#39;还有&#39;</span><span class="p">,</span><span class="s1">&#39;不让&#39;</span><span class="p">,</span><span class="s1">&#39;出来&#39;</span><span class="p">,</span><span class="s1">&#39;不是&#39;</span><span class="p">,</span><span class="s1">&#39;点儿&#39;</span><span class="p">,</span><span class="s1">&#39;了解&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">extract_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">article</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        抽取关键词 API</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        article:</span>
+<span class="sd">            待抽取文本</span>
+<span class="sd">        </span>
+<span class="sd">        Returns：</span>
+<span class="sd">        ----------</span>
+<span class="sd">        keywords:</span>
+<span class="sd">            带权重的关键词列表</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cut_sentence</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sen_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_rank</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_keywords</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_cut_sentence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">article</span><span class="p">):</span>
+        <span class="n">sents</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sen</span> <span class="ow">in</span> <span class="n">sents</span><span class="p">:</span>
+            <span class="n">words</span> <span class="o">=</span> <span class="n">sen</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_words</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_id</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">word_id</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_id</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">id_word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sen_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_id</span><span class="p">[</span><span class="n">word</span><span class="p">])</span>
+    
+    <span class="k">def</span> <span class="nf">_norm_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="nb">sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="nb">sum</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">def</span> <span class="nf">_create_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_word</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_word</span><span class="p">)])</span>
+        <span class="n">sen_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sen</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sen</span><span class="p">):</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span>
+            <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">right</span> <span class="o">&gt;</span> <span class="n">sen_len</span><span class="p">:</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">sen_len</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">idx</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">sen</span><span class="p">[</span><span class="n">idx</span><span class="p">]][[</span><span class="n">sen</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">sen</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">sen</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">_caculate_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norm_matrix</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_id</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_nums</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">damping</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">damping</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PR</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_norm_matrix</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_keywords</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_get_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">word_pr</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PR</span><span class="p">)):</span>
+            <span class="n">word_pr</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id_word</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PR</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">word_pr</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">res</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>gensim</strong></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">gensim.summarization</span> <span class="kn">import</span> <span class="n">keywords</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Challenges in natural language processing frequently involve</span>
+<span class="s1">speech recognition, natural language understanding, natural language</span>
+<span class="s1">generation (frequently from formal, machine-readable logical forms),</span>
+<span class="s1">connecting language and machine perception, dialog systems, or some</span>
+<span class="s1">combination thereof.&#39;&#39;&#39;</span>
+
+<span class="n">keywords</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[3]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;natural language&#39;, &#39;machine&#39;, &#39;frequently&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Help on function keywords in module gensim.summarization.keywords:
+
+keywords(text, ratio=0.2, words=None, split=False, scores=False, pos_filter=(&#39;NN&#39;, &#39;JJ&#39;), lemmatize=False, deacc=True)
+    Get most ranked words of provided text and/or its combinations.
+    
+    Parameters
+    ----------
+    
+    text : str
+        Input text.
+    ratio : float, optional
+        If no &#34;words&#34; option is selected, the number of sentences is reduced by the provided ratio,
+        else, the ratio is ignored.
+    words : int, optional
+        Number of returned words.
+    split : bool, optional
+        Whether split keywords if True.
+    scores : bool, optional
+        Whether score of keyword.
+    pos_filter : tuple, optional
+        Part of speech filters.
+    lemmatize : bool, optional
+        If True - lemmatize words.
+    deacc : bool, optional
+        If True - remove accentuation.
+    
+    Returns
+    -------
+    result: list of (str, float)
+        If `scores`, keywords with scores **OR**
+    result: list of str
+        If `split`, keywords only **OR**
+    result: str
+        Keywords, joined by endl.
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Word2Vec">Word2Vec<a class="anchor-link" href="#Word2Vec">&#182;</a></h2>
 </div>
 </div>
@@ -13517,8 +13796,8 @@ Prefix dict has been built successfully.
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">gensim.test.utils</span> <span class="k">import</span> <span class="n">common_texts</span><span class="p">,</span> <span class="n">get_tmpfile</span>
-<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="k">import</span> <span class="n">Word2Vec</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">gensim.test.utils</span> <span class="kn">import</span> <span class="n">common_texts</span><span class="p">,</span> <span class="n">get_tmpfile</span>
+<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">Word2Vec</span>
 </pre></div>
 
     </div>
